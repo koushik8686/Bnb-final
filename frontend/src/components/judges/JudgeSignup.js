@@ -5,7 +5,6 @@ const JudgeSignup = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    gameid: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -33,7 +32,6 @@ const JudgeSignup = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Successful registration
         navigate('/login'); // Redirect to login page
       } else {
         setError(data.message || 'Registration failed');
@@ -74,20 +72,6 @@ const JudgeSignup = () => {
                 type="email"
                 required
                 value={formData.email}
-                onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="gameid" className="block text-sm font-medium text-gray-700">
-                Game ID
-              </label>
-              <input
-                id="gameid"
-                name="gameid"
-                type="text"
-                required
-                value={formData.gameid}
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />

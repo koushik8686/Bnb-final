@@ -1,10 +1,9 @@
-// src/components/judgeLogin.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const JudgeLogin = () => {
   const [formData, setFormData] = useState({
-    gameid: '',
+    email: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -32,7 +31,6 @@ const JudgeLogin = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Successful login
         navigate('/home'); // Redirect to home page
       } else {
         setError(data.message || 'Login failed');
@@ -50,15 +48,15 @@ const JudgeLogin = () => {
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="space-y-4">
             <div>
-              <label htmlFor="gameid" className="block text-sm font-medium text-gray-700">
-                Game ID
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email
               </label>
               <input
-                id="gameid"
-                name="gameid"
+                id="email"
+                name="email"
                 type="text"
                 required
-                value={formData.gameid}
+                value={formData.email}
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />

@@ -3,24 +3,24 @@ const Judge = require('../models/Judge');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+// Register Route
 router.post('/register', async (req, res) => {
     try {
-        const { name, email, gameid, password } = req.body;
+        const { name, email, password } = req.body;
 
-        // Check if judge already exists
+        // Check if judge already exists by email
         const existingJudge = await Judge.findOne({ email });
         if (existingJudge) {
             return res.status(400).json({ message: 'Judge already exists' });
         }
 
-        // Hash password
+        // Hash the password before saving
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create new judge
         const judge = new Judge({
             name,
             email,
-            games: [{ gameid }],
             password: hashedPassword
         });
 
@@ -32,12 +32,13 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// Login Route
 router.post('/login', async (req, res) => {
     try {
-        const { gameid, password } = req.body;
+        const { email, password } = req.body;
 
-        // Find judge by gameid
-        const judge = await Judge.findOne({ 'games.gameid': gameid });
+        // Find judge by email
+        const judge = await Judge.findOne({ email });
         if (!judge) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
