@@ -20,7 +20,7 @@ const JudgeSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:4000/auth/register', {
+      const response = await fetch('http://localhost:4000/judge/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

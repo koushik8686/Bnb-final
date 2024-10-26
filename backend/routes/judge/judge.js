@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Judge = require('../models/Judge');
+const Judge = require('../../models/JudgeSchema');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 

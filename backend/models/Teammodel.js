@@ -2,8 +2,8 @@
 const mongoose = require('mongoose');
 
 const teamSchema = new mongoose.Schema({
-    TeamCode: { type: String, required: true },
-    teamNickname: { type: String, required: true },
+    TeamCode: { type: String },
+    teamNickname: { type: String },
     password:String,
     imgurl:String,
     members: [{ id: String , uniquecode: String }],

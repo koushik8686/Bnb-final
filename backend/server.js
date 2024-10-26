@@ -26,8 +26,8 @@ app.use(express.json());
 // Initialize Socket.IO on the same server as Express
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Frontend URL
-    methods: ["GET", "POST"],
+    origin: "*", // Frontend URL
+    methods: 'GET,POST,PUT,DELETE', // Specify allowed methods if needed
   },
 });
 
