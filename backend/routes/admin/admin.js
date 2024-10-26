@@ -2,10 +2,11 @@ const express = require('express');
 const Adminmodel = require('../../models/AdminSchema')
 const router = express.Router();
 const Teammodel = require('../../models/Teammodel');
-const Gamemodel = require('../../models/Gammeschema');
+const Game = require('../../models/Gammeschema');
 const Judgemodel = require('../../models/JudgeSchema');
 const multer = require('multer');
 const path = require('path');
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -70,7 +71,7 @@ router.post('/login', async (req, res) => {
     const { eventName, singleplayer, multiplayer, date, num_of_players, start_time, end_time, judges } = req.body.game;
 
     const newGame = new Game({
-        eventName,
+        eventname: eventName,
         singleplayer,
         multiplayer,
         date,
@@ -92,5 +93,19 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Failed to add game' });
     }
 });
+
+router.get('/getjudges', function(req, res) {
+  console.log("req came");
+  Judgemodel.find()
+    .then((judges) => {
+      // No need for a callback here, judges is directly available
+      res.json(judges);
+    })
+    .catch(err => {
+      console.error(err); // Log the error for debugging
+      res.status(500).json({ error: 'Failed to fetch judges' }); // Send an error response
+    });
+});
+
 
 module.exports =router

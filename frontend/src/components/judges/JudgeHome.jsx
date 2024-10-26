@@ -1,47 +1,84 @@
 import React, { useState, useEffect } from 'react';
 
 const colors = {
-  primary: '#4a90e2',
-  secondary: '#50e3c2',
-  background: '#f5f7fa',
-  text: '#333',
+  primary: '#1e3a8a',
+  secondary: '#3b82f6',
+  background: '#f3f4f6',
+  text: '#1f2937',
   cardBg: '#ffffff',
-  success: '#5cb85c',
-  warning: '#f0ad4e'
+  success: '#10b981',
+  warning: '#f59e0b',
+  danger: '#ef4444',
 };
 
 const styles = {
   container: {
+    backgroundColor: colors.background,
+    minHeight: '100vh',
+    fontFamily: 'Arial, sans-serif',
+  },
+  header: {
+    backgroundColor: colors.primary,
+    color: '#ffffff',
+    padding: '1rem 2rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  logo: {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+  },
+  nav: {
+    display: 'flex',
+    gap: '1rem',
+  },
+  navItem: {
+    color: '#ffffff',
+    textDecoration: 'none',
+  },
+  logoutButton: {
+    backgroundColor: colors.danger,
+    color: '#ffffff',
+    border: 'none',
+    padding: '0.5rem 1rem',
+    borderRadius: '0.25rem',
+    cursor: 'pointer',
+  },
+  main: {
     maxWidth: '1200px',
     margin: '0 auto',
     padding: '2rem',
-    backgroundColor: colors.background,
-    minHeight: '100vh',
   },
-  header: {
-    fontSize: '2.5rem',
-    color: colors.primary,
-    marginBottom: '2rem',
-    textAlign: 'center',
+  pageTitle: {
+    fontSize: '2rem',
+    color: colors.text,
+    marginBottom: '1rem',
+  },
+  applyButton: {
+    backgroundColor: colors.success,
+    color: '#ffffff',
+    border: 'none',
+    padding: '0.5rem 1rem',
+    borderRadius: '0.25rem',
+    cursor: 'pointer',
+    float: 'right',
   },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '2rem',
+    gap: '1.5rem',
+    marginTop: '2rem',
   },
   card: {
     backgroundColor: colors.cardBg,
-    borderRadius: '8px',
+    borderRadius: '0.5rem',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     overflow: 'hidden',
-    transition: 'transform 0.3s ease',
-  },
-  cardHover: {
-    transform: 'translateY(-5px)',
   },
   cardHeader: {
-    backgroundColor: colors.primary,
-    color: colors.cardBg,
+    backgroundColor: colors.secondary,
+    color: '#ffffff',
     padding: '1rem',
     fontSize: '1.25rem',
     fontWeight: 'bold',
@@ -52,36 +89,27 @@ const styles = {
   cardFooter: {
     padding: '1rem',
     borderTop: `1px solid ${colors.background}`,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   badge: {
     display: 'inline-block',
     padding: '0.25rem 0.5rem',
-    borderRadius: '4px',
-    fontSize: '0.875rem',
+    borderRadius: '9999px',
+    fontSize: '0.75rem',
     fontWeight: 'bold',
     textTransform: 'uppercase',
   },
-  button: {
-    backgroundColor: colors.secondary,
-    color: colors.text,
-    border: 'none',
-    padding: '0.5rem 1rem',
-    borderRadius: '4px',
-    fontSize: '1rem',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease',
-    width: '100%',
-  },
-  buttonHover: {
-    backgroundColor: colors.primary,
-    color: colors.cardBg,
+  amount: {
+    fontSize: '1.25rem',
+    fontWeight: 'bold',
+    color: colors.primary,
   },
 };
 
 export default function JudgeHome() {
   const [games, setGames] = useState([]);
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [hoveredButton, setHoveredButton] = useState(null);
 
   useEffect(() => {
     // Fetch games for the current judge
@@ -96,50 +124,38 @@ export default function JudgeHome() {
         {
           _id: '1',
           eventname: 'Chess Tournament',
-          singleplayer: true,
-          multiplayer: false,
-          Date: '2023-07-15',
-          start_time: '2023-07-15T10:00:00',
-          end_time: '2023-07-15T18:00:00',
+          description: 'Annual chess championship for corporate teams',
           status: 'In Progress',
+          amount: 250000,
           Location: 'Main Hall',
           number_of_players: 16,
-          teams: [
-            { corporatecode: 'CORP1', teamNickname: 'Chess Masters' },
-            { corporatecode: 'CORP2', teamNickname: 'Knight Riders' },
-          ],
         },
         {
           _id: '2',
           eventname: 'Debate Competition',
-          singleplayer: false,
-          multiplayer: true,
-          Date: '2023-07-16',
-          start_time: '2023-07-16T14:00:00',
-          end_time: '2023-07-16T17:00:00',
+          description: 'Inter-corporate debate on business ethics',
           status: 'Upcoming',
+          amount: 300000,
           Location: 'Auditorium',
           number_of_players: 12,
-          teams: [
-            { corporatecode: 'CORP3', teamNickname: 'Wordsmiths' },
-            { corporatecode: 'CORP4', teamNickname: 'Eloquent Speakers' },
-          ],
         },
         {
           _id: '3',
           eventname: 'Coding Challenge',
-          singleplayer: true,
-          multiplayer: false,
-          Date: '2023-07-17',
-          start_time: '2023-07-17T09:00:00',
-          end_time: '2023-07-17T13:00:00',
+          description: 'Hackathon for innovative tech solutions',
           status: 'Completed',
+          amount: 400000,
           Location: 'Tech Lab',
           number_of_players: 20,
-          teams: [
-            { corporatecode: 'CORP5', teamNickname: 'Code Ninjas' },
-            { corporatecode: 'CORP6', teamNickname: 'Binary Bosses' },
-          ],
+        },
+        {
+          _id: '4',
+          eventname: 'Business Case Study',
+          description: 'Analysis and presentation of real-world business scenarios',
+          status: 'Applied',
+          amount: 500000,
+          Location: 'Conference Center',
+          number_of_players: 8,
         },
       ]);
     };
@@ -154,78 +170,52 @@ export default function JudgeHome() {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.header}>My Games as Judge</h1>
-      <div style={styles.grid}>
-        {games.map((game) => (
-          <div
-            key={game._id}
-            style={{
-              ...styles.card,
-              ...(hoveredCard === game._id ? styles.cardHover : {}),
-            }}
-            onMouseEnter={() => setHoveredCard(game._id)}
-            onMouseLeave={() => setHoveredCard(null)}
-          >
-            <div style={styles.cardHeader}>
-              <div>{game.eventname}</div>
-              <div
-                style={{
-                  ...styles.badge,
-                  backgroundColor:
-                    game.status === 'In Progress'
-                      ? colors.success
-                      : game.status === 'Upcoming'
-                      ? colors.warning
-                      : colors.secondary,
-                  color: colors.cardBg,
-                }}
-              >
-                {game.status}
+      <header style={styles.header}>
+        <div style={styles.logo}>JudgeX</div>
+        <nav style={styles.nav}>
+          <a href="#" style={styles.navItem}>Dashboard</a>
+          <a href="#" style={styles.navItem}>Events</a>
+          <a href="#" style={styles.navItem}>Profile</a>
+        </nav>
+        <button style={styles.logoutButton}>Log Out</button>
+      </header>
+      <main style={styles.main}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h1 style={styles.pageTitle}>Event Judging Portal</h1>
+          <button style={styles.applyButton}>Apply for Event</button>
+        </div>
+        <div style={styles.grid}>
+          {games.map((game) => (
+            <div key={game._id} style={styles.card}>
+              <div style={styles.cardHeader}>{game.eventname}</div>
+              <div style={styles.cardContent}>
+                <p>{game.description}</p>
+                <p><strong>Location:</strong> {game.Location}</p>
+                <p><strong>Participants:</strong> {game.number_of_players}</p>
+              </div>
+              <div style={styles.cardFooter}>
+                <div style={styles.amount}>${game.amount.toLocaleString()}</div>
+                <div
+                  style={{
+                    ...styles.badge,
+                    backgroundColor:
+                      game.status === 'In Progress'
+                        ? colors.success
+                        : game.status === 'Upcoming'
+                        ? colors.warning
+                        : game.status === 'Completed'
+                        ? colors.secondary
+                        : colors.primary,
+                    color: '#ffffff',
+                  }}
+                >
+                  {game.status}
+                </div>
               </div>
             </div>
-            <div style={styles.cardContent}>
-              <p>
-                <strong>Date:</strong> {new Date(game.Date).toLocaleDateString()}
-              </p>
-              <p>
-                <strong>Time:</strong>{' '}
-                {`${new Date(game.start_time).toLocaleTimeString()} - ${new Date(
-                  game.end_time
-                ).toLocaleTimeString()}`}
-              </p>
-              <p>
-                <strong>Location:</strong> {game.Location}
-              </p>
-              <p>
-                <strong>Players:</strong> {game.number_of_players}
-              </p>
-              <p>
-                <strong>Teams:</strong> {game.teams.length}
-              </p>
-              <ul>
-                {game.teams.map((team) => (
-                  <li key={team.corporatecode}>
-                    {team.teamNickname} ({team.corporatecode})
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div style={styles.cardFooter}>
-              <button
-                onClick={() => handleGiveJudgment(game._id)}
-                style={{
-                  ...styles.button,
-                  ...(hoveredButton === game._id ? styles.buttonHover : {}),
-                }}
-                onMouseEnter={() => setHoveredButton(game._id)}
-                onMouseLeave={() => setHoveredButton(null)}
-              >
-                Give Judgment
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }

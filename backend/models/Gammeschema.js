@@ -2,12 +2,14 @@
 const mongoose = require('mongoose');
 
 const GameSchema = new mongoose.Schema({
+   gameid:String,
+    gamepicture:String,
     eventname:String,
     singleplayer:Boolean,
     multiplayer:Boolean,
-    Date:Date,
-    start_time:Date,
-    end_time:Date,
+    Date:String,
+    start_time:String,
+    end_time:String,
     pos1:String,
     pos2:String,
     pos3:String,

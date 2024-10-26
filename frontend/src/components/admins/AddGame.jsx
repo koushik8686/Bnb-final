@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useEffect } from 'react';
+
+
+
 
 export function AddGame() {
+
   const [game, setGame] = useState({
     eventName: '',
     singleplayer: false,
@@ -22,14 +27,23 @@ export function AddGame() {
   };
 
   const handleJudgeChange = (index, value) => {
-    const selectedJudge = availableJudges.find(judge => judge.id === value);
-    const updatedJudges = [...game.judges];
-    updatedJudges[index] = { id: selectedJudge.id, name: selectedJudge.name };
-    setGame(prevGame => ({ ...prevGame, judges: updatedJudges }));
-  };
+    console.log("Selected value:", value);
+    console.log("Available Judges:", Availablejudges);
+
+    const selectedJudge = Availablejudges.find(judge => judge._id === value);
+    if (selectedJudge) {
+        const updatedJudges = [...game.judges];
+        updatedJudges[index] = { _id: selectedJudge._id, name: selectedJudge.name };
+        setGame(prevGame => ({ ...prevGame, judges: updatedJudges }));
+    } else {
+        console.error(`Judge with value ${value} not found in Availablejudges`);
+    }
+};
+
+
 
   const addJudge = () => {
-    setGame(prevGame => ({ ...prevGame, judges: [...prevGame.judges, { id: '', name: '' }] }));
+    setGame(prevGame => ({ ...prevGame, judges: [...prevGame.judges, { _id: '', name: '' }] }));
   };
 
   const removeJudge = (index) => {
@@ -42,13 +56,20 @@ export function AddGame() {
       .then(response => console.log(response))
       .catch(error => console.error(error));
   };
-
-  const availableJudges = [
-    { id: '1', name: 'Judge A' },
-    { id: '2', name: 'Judge B' },
-    { id: '3', name: 'Judge C' }
-  ];
-
+  const [Availablejudges, setAvailablejudges] = useState([])
+  useEffect(() => {
+    console.log("sending data");
+    axios.get('http://localhost:4000/admin/getjudges')
+     .then(res => {
+       console.log(res);
+        setAvailablejudges(res.data.map(({ _id, name }) => ({ _id, name })));
+        console.log(Availablejudges);
+      })
+     .catch(err => {
+        console.error(err);
+      });
+   }, []);
+  
   const styles = {
     container: {
       width: '80%',
@@ -173,19 +194,15 @@ export function AddGame() {
         <h3>Judges</h3>
         {game.judges.map((judge, index) => (
           <div key={index} style={styles.judgeContainer}>
-            <select
-              value={judge.id}
-              onChange={(e) => handleJudgeChange(index, e.target.value)}
-              style={styles.input}
-              required
-            >
-              <option value="">Select Judge</option>
-              {availableJudges.map(judgeOption => (
-                <option key={judgeOption.id} value={judgeOption.id}>
-                  {judgeOption.name}
-                </option>
-              ))}
-            </select>
+          <select onChange={(e) => handleJudgeChange(index, e.target.value)}>
+    <option value="">Select Judge</option>
+    {Availablejudges.map(judge => (
+        <option key={judge._id} value={judge._id}>
+            {judge.name}
+        </option>
+    ))}
+</select>
+
             {index > 0 && (
               <button
                 type="button"

@@ -54,15 +54,17 @@ router.post('/login', async (req, res) => {
 
 router.get('/getgames/:id', async (req, res) => {
     try {
-        const judge = await Judge.findOne({ id: req.params.id });
-        const games = [];
-        for (let index = 0; index < judge.games.length; index++) {
-            const game = await Games.findById(judge.games[index].id);
-            games.push(game);
+        const judge = await Judge.findOne({ _id: req.params.id }); // Use _id for MongoDB documents
+        if (!judge) {
+            return res.status(404).json({ message: 'Judge not found' });
         }
+        // Query games where the judges array contains an object with the matching id
+        const games = await Games.find({ 'judges.id': judge._id.toString() }); 
+
         res.json(games);
     } catch (error) {
-        res.status(500).json({ message: 'Error retrieving games' });
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ message: 'Error retrieving games', error: error.message }); // Include error message
     }
 });
 
