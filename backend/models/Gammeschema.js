@@ -8,8 +8,9 @@ const GameSchema = new mongoose.Schema({
     Date:Date,
     start_time:Date,
     end_time:Date,
-    winner:String,
-    loser:String,
+    pos1:String,
+    pos2:String,
+    pos3:String,
     status:String,
     Location:String,
     teams:[{
@@ -19,4 +20,4 @@ const GameSchema = new mongoose.Schema({
     }]
 });
 
-module.exports = mongoose.model('Team', GameSchema);
+module.exports = mongoose.model('Games', GameSchema);
