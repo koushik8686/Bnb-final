@@ -4,7 +4,7 @@ const userschema = mongoose.Schema({
     corporatecode:String,
     email:String,
     password: String,
-    team:String,
+    uniquecode:String,
     points:[{
      game:String,
      points:Number
