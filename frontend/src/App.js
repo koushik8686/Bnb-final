@@ -5,7 +5,6 @@ import AdminHome from './components/admins/Home';
 import JudgeLogin from './components/judges/JudgeLogin';
 import JudgeSignup from './components/judges/JudgeSignup';
 import TeamLeadsLogin from './components/teamleads/teamleadsLogin';
-<<<<<<< HEAD
 import TeamLeadsHome from './components/teamleads/teamleadsHome';
 import TeamLeadsDashboard from './components/teamleads/teamleadsDashboard';
 import TeamLeadsRegisteredGames from './components/teamleads/teamleadsRegister-Games';
@@ -13,16 +12,19 @@ import TeamLeadsRegisteredDetails from './components/teamleads/teamleadsRegister
 import TeamLeadsList from './components/teamleads/teamleadsTeam-List';
 import TeamLeadsStandings from './components/teamleads/teamleadsTeam-Standings';
 import TeamLeadsContact from './components/teamleads/teamleadsChatBot';
-=======
-import TeamLeadsHome from './components/teamleads/teamleadsHome'
 import JudgeHome from './components/judges/JudgeHome';
+import UserHome from './components/user/UserHome';
+import UserLogin from './components/user/UserLogin';
+import UserRegister from './components/user/UserRegister';
 
->>>>>>> 9edddcedd1daadac581d181722c50bff9fd758a0
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
+          <Route path='/user/login' Component={UserLogin} />
+          <Route path='/user/register' Component={UserRegister} />
+          <Route path='/user/home' Component={UserHome} />
           <Route path="/admin/login" Component={AdminLogin} />
           <Route path="/admin/home" Component={AdminHome} />
           <Route path="/judges/login" Component={JudgeLogin} />

@@ -33,7 +33,7 @@ const JudgeLogin = () => {
 
       if (response.ok) {
         Cookies.set("Judge" , data.id)
-        navigate('/judge/home'); // Redirect to home page
+        navigate('/judges/home'); // Redirect to home page
       } else {
         setError(data.message || 'Login failed');
       }

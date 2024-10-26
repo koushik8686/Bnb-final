@@ -53,19 +53,28 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/getgames/:id', async (req, res) => {
-    try {
+    const games =[]
+
         const judge = await Judge.findOne({ _id: req.params.id }); // Use _id for MongoDB documents
         if (!judge) {
             return res.status(404).json({ message: 'Judge not found' });
         }
-        // Query games where the judges array contains an object with the matching id
-        const games = await Games.find({ 'judges.id': judge._id.toString() }); 
+        // Query games where the judges array contains an object with the matching id        
+        await Games.find().then((arr)=>{
+            arr.forEach(game => {
+                console.log(game);
+                game.judges.forEach(jud => {
+                    if(String(jud._id) === String(judge._id)){
+                        games.push(game)
+                        console.log(games, "game");
+                    }
+                });
+            });
+        });
+        
+        console.log(games);
+    res.send(games);
 
-        res.json(games);
-    } catch (error) {
-        console.error(error); // Log the error for debugging
-        res.status(500).json({ message: 'Error retrieving games', error: error.message }); // Include error message
-    }
 });
 
 module.exports = router;

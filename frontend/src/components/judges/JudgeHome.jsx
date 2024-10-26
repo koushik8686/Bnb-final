@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const colors = {
   primary: '#1e3a8a',
@@ -106,66 +108,50 @@ const styles = {
     fontWeight: 'bold',
     color: colors.primary,
   },
+  dropdown: {
+    marginTop: '1rem',
+  },
+  judgeButton: {
+    backgroundColor: colors.secondary,
+    color: '#ffffff',
+    border: 'none',
+    padding: '0.5rem 1rem',
+    borderRadius: '0.25rem',
+    cursor: 'pointer',
+    marginTop: '0.5rem',
+  },
 };
 
 export default function JudgeHome() {
-  const [games, setGames] = useState([]);
+const navigate = useNavigate()
+    const [games, setGames] = useState([]);
+  const judgeid = Cookies.get('Judge');
 
   useEffect(() => {
     // Fetch games for the current judge
-    // This is a placeholder. Replace with actual API call
     const fetchGames = async () => {
-      // const response = await fetch('/api/judge/games');
-      // const data = await response.json();
-      // setGames(data);
-
-      // Placeholder data
-      setGames([
-        {
-          _id: '1',
-          eventname: 'Chess Tournament',
-          description: 'Annual chess championship for corporate teams',
-          status: 'In Progress',
-          amount: 250000,
-          Location: 'Main Hall',
-          number_of_players: 16,
-        },
-        {
-          _id: '2',
-          eventname: 'Debate Competition',
-          description: 'Inter-corporate debate on business ethics',
-          status: 'Upcoming',
-          amount: 300000,
-          Location: 'Auditorium',
-          number_of_players: 12,
-        },
-        {
-          _id: '3',
-          eventname: 'Coding Challenge',
-          description: 'Hackathon for innovative tech solutions',
-          status: 'Completed',
-          amount: 400000,
-          Location: 'Tech Lab',
-          number_of_players: 20,
-        },
-        {
-          _id: '4',
-          eventname: 'Business Case Study',
-          description: 'Analysis and presentation of real-world business scenarios',
-          status: 'Applied',
-          amount: 500000,
-          Location: 'Conference Center',
-          number_of_players: 8,
-        },
-      ]);
+      try {
+        const response = await fetch(`http://localhost:4000/judge/getgames/${judgeid}`); // Adjust the endpoint as needed
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setGames(data);
+      } catch (error) {
+        console.error('Error fetching games:', error);
+      }
     };
 
     fetchGames();
-  }, []);
+  }, [judgeid]);
 
   const handleGiveJudgment = (gameId) => {
     // Implement judgment logic here
     console.log(`Give judgment for game ${gameId}`);
+  };
+
+  const navigateToGame = (gameId) => {
+   navigate(`/game/${gameId}`); // Navigate to the game page
   };
 
   return (
@@ -191,26 +177,21 @@ export default function JudgeHome() {
               <div style={styles.cardContent}>
                 <p>{game.description}</p>
                 <p><strong>Location:</strong> {game.Location}</p>
-                <p><strong>Participants:</strong> {game.number_of_players}</p>
-              </div>
-              <div style={styles.cardFooter}>
-                <div style={styles.amount}>${game.amount.toLocaleString()}</div>
-                <div
-                  style={{
-                    ...styles.badge,
-                    backgroundColor:
-                      game.status === 'In Progress'
-                        ? colors.success
-                        : game.status === 'Upcoming'
-                        ? colors.warning
-                        : game.status === 'Completed'
-                        ? colors.secondary
-                        : colors.primary,
-                    color: '#ffffff',
-                  }}
-                >
-                  {game.status}
-                </div>
+                <p><strong>Participants:</strong></p>
+                <select style={styles.dropdown}>
+                  {game.judges.map((judge, index) => (
+                    <option key={index}>{judge.name}</option>
+                  ))}
+                </select>
+                {game.judges.map((judge, index) => (
+                  <button 
+                    key={index} 
+                    style={styles.judgeButton} 
+                    onClick={() => navigateToGame(game._id)}
+                  >
+                    Judge this game
+                  </button>
+                ))}
               </div>
             </div>
           ))}
