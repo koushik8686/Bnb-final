@@ -177,21 +177,13 @@ const navigate = useNavigate()
               <div style={styles.cardContent}>
                 <p>{game.description}</p>
                 <p><strong>Location:</strong> {game.Location}</p>
-                <p><strong>Participants:</strong></p>
-                <select style={styles.dropdown}>
-                  {game.judges.map((judge, index) => (
-                    <option key={index}>{judge.name}</option>
-                  ))}
-                </select>
-                {game.judges.map((judge, index) => (
+                <p><strong>Participants:</strong></p>             
                   <button 
-                    key={index} 
                     style={styles.judgeButton} 
                     onClick={() => navigateToGame(game._id)}
                   >
                     Judge this game
                   </button>
-                ))}
               </div>
             </div>
           ))}
