@@ -13,6 +13,7 @@ const GameSchema = new mongoose.Schema({
     pos3:String,
     status:String,
     Location:String,
+    number_of_players:Number,
     teams:[{
         corporatecode:String,
         points:Number,

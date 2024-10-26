@@ -47,7 +47,11 @@ io.on('connection', (socket) => {
     })
 
 app.get('/' , function (req, res) {res.send("hi");})
-
+app.use("/user" , require("./routes/user/user"))
+app.use("/games" , require("./routes/games/games"))
+app.use("/teamleads" , require("./routes/team-leads/team"))
+app.use("/judge" , require("./routes/judge/judge"))
+app.use("/admin" , require("./routes/admin/admin"))
 
 server.listen(port, () => {
         console.log(`Server is running on port ${port}`);
