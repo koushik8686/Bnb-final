@@ -1,6 +1,7 @@
 // AddTeam.js
 import React, { useState } from 'react';
 
+
 export function AddTeam() {
   const [teamCode, setTeamCode] = useState('');
   const [teamNickname, setTeamNickname] = useState('');
@@ -20,13 +21,14 @@ export function AddTeam() {
     formData.append('image', image);
 
     // Send the formData to the backend (URL to backend needs to be updated accordingly)
-    fetch('/admin/addteam', {
+    fetch('http://localhost:4000/admin/addteam', {
       method: 'POST',
       body: formData,
     })
       .then((response) => response.json())
       .then((data) => {
         console.log('Team added:', data);
+        alert(data.message)
       })
       .catch((error) => {
         console.error('Error adding team:', error);
