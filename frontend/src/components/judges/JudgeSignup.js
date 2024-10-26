@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const JudgeSignup = () => {
   const [formData, setFormData] = useState({
@@ -20,26 +21,26 @@ const JudgeSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:4000/judge/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(formData)
-      });
+        const response = await axios.post('http://localhost:4000/judge/register', formData, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true // This is important for sending cookies
+        });
 
-      const data = await response.json();
+        // Assuming the backend sends a message or data you want to handle
+        const data = response.data;
 
-      if (response.ok) {
-        navigate('/login'); // Redirect to login page
-      } else {
-        setError(data.message || 'Registration failed');
-      }
+        if (response.status === 200) {
+            navigate('/login'); // Redirect to login page
+        } else {
+            setError(data.message || 'Registration failed');
+        }
     } catch (err) {
-      setError('Network error occurred');
+        console.error(err); // Log the error for debugging
+        setError('Network error occurred');
     }
-  };
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">

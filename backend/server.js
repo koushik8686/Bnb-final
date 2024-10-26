@@ -18,9 +18,12 @@ mongoose.connect(process.env.URL , {
 });
 
 app.use(express.static("uploads"));
+const corsOptions = {
+  origin: 'http://localhost:3000', // Specify the origin you want to allow
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+};
 
-// Middleware
-app.use(cors());
+app.use(cors(corsOptions)); // 
 app.use(express.json());
 
 // Initialize Socket.IO on the same server as Express
