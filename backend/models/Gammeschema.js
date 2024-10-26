@@ -16,7 +16,7 @@ const GameSchema = new mongoose.Schema({
     teams:[{
         corporatecode:String,
         points:Number,
-        teamNicknam:String,
+        teamNickname:String,
         players:[{
           id:String,
           uniquecode:String
