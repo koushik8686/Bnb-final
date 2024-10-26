@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
 import { FcGoogle } from 'react-icons/fc'
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi'
@@ -13,8 +13,9 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
-
+  
   const responsegoogle = async (authtesult) => {
+    
     try {
       console.log(authtesult);
       if (authtesult) {
@@ -43,8 +44,8 @@ export default function AdminLogin() {
     setIsLoading(true)
     try {
       const { data } = await axios.post(`http://localhost:4000/admin/login`, { email, password })
-      Cookies.set('user', data.userId)
-      navigate('/home')
+      Cookies.set('admin', data.userId)
+      navigate('/admin/home')
     } catch (error) {
       alert('Invalid email or password. Please try again.')
     }
@@ -90,7 +91,10 @@ export default function AdminLogin() {
     }
 
     animate()
-
+    const admin =Cookies.get('admin')
+    if (admin) {
+        navigate('/admin/home')
+    }
     return () => {
       cancelAnimationFrame(animationFrameId)
     }

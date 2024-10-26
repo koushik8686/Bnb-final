@@ -5,7 +5,8 @@ const JudgeSchema = mongoose.Schema({
     email:String,
     games:[{
         gameid:String
-    }]
+    }],
+    password:String
 })
 
 module.exports = mongoose.model('Judges', JudgeSchema);
