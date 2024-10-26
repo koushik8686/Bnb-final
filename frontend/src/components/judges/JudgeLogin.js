@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie'
 
 const JudgeLogin = () => {
   const [formData, setFormData] = useState({
@@ -31,7 +32,8 @@ const JudgeLogin = () => {
       const data = await response.json();
 
       if (response.ok) {
-        navigate('/home'); // Redirect to home page
+        Cookies.set("Judge" , data.id)
+        navigate('/judge/home'); // Redirect to home page
       } else {
         setError(data.message || 'Login failed');
       }

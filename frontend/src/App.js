@@ -6,6 +6,7 @@ import JudgeLogin from './components/judges/JudgeLogin';
 import JudgeSignup from './components/judges/JudgeSignup';
 import TeamLeadsLogin from './components/teamleads/teamleadsLogin';
 import TeamLeadsHome from './components/teamleads/teamleadsHome'
+import JudgeHome from './components/judges/JudgeHome';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/admin/home" Component={AdminHome} />
           <Route path="/judges/login" Component={JudgeLogin} />
           <Route path="/judges/signup" Component={JudgeSignup} />
+          <Route path="/judges/home" Component={JudgeHome} />
           <Route path="/teamleads/login" Component={TeamLeadsLogin} />
           <Route path="/teamleads/home" Component={TeamLeadsHome} />
         </Routes>

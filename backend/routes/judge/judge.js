@@ -1,27 +1,21 @@
 const router = require('express').Router();
 const Judge = require('../../models/JudgeSchema');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const Games = require('../../models/Gammeschema');
 
-// Register Route
 router.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
-
         // Check if judge already exists by email
         const existingJudge = await Judge.findOne({ email });
         if (existingJudge) {
             return res.status(400).json({ message: 'Judge already exists' });
         }
-
         // Hash the password before saving
-        const hashedPassword = await bcrypt.hash(password, 10);
-
         // Create new judge
         const judge = new Judge({
             name,
             email,
-            password: hashedPassword
+            password: password
         });
 
         await judge.save();
@@ -36,36 +30,39 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-
+        console.log(email , password);
+        
         // Find judge by email
         const judge = await Judge.findOne({ email });
         if (!judge) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
-
         // Check password
-        const validPassword = await bcrypt.compare(password, judge.password);
-        if (!validPassword) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+        if (password==judge.password) {
+            return res.status(200).json({ message: 'Login successful'  ,id:judge._id });
+        }else{
+          return res.status(500).json({ message: 'Invalid credentials' });
         }
-
         // Create token
-        const token = jwt.sign(
-            { id: judge._id },
-            process.env.JWT_SECRET || 'your_jwt_secret',
-            { expiresIn: '1d' }
-        );
-
-        // Set cookie
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 24 * 60 * 60 * 1000 // 1 day
-        });
+        
 
         res.json({ message: 'Logged in successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error logging in' });
+    }
+});
+
+router.get('/getgames/:id', async (req, res) => {
+    try {
+        const judge = await Judge.findOne({ id: req.params.id });
+        const games = [];
+        for (let index = 0; index < judge.games.length; index++) {
+            const game = await Games.findById(judge.games[index].id);
+            games.push(game);
+        }
+        res.json(games);
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving games' });
     }
 });
 

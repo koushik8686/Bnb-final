@@ -9,6 +9,11 @@ const userschema = mongoose.Schema({
     points:[{
      game:String,
      points:Number
+    }],
+    certificates:[{
+        name:String,
+        position:Number,
+        evevent:String
     }]
 })
 
