@@ -8,6 +8,7 @@ const port = 4000;
 const cors = require('cors');
 // const messageModel = require('./models/messagemodel');
 const dotenv = require('dotenv');
+
 dotenv.config();
 
 // Connect to MongoDB
@@ -16,7 +17,6 @@ mongoose.connect(process.env.URL , {
   useUnifiedTopology: true,
 });
 
-app.use(express.static("uploads"));
 app.use(express.static("uploads"));
 
 // Middleware
