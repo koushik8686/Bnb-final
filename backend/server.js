@@ -11,7 +11,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // Connect to MongoDB
-mongoose.connect(process.env.URL || "mongodb://127.0.0.1:27017/bitnbuild", {
+mongoose.connect(process.env.URL , {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

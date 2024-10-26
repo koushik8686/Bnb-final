@@ -5,6 +5,7 @@ const teamSchema = new mongoose.Schema({
     TeamCode: { type: String, required: true },
     teamNickname: { type: String, required: true },
     password:String,
+    imgurl:String,
     members: [{ id: String , uniquecode: String }],
 });
 
