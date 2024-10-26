@@ -17,6 +17,10 @@ const GameSchema = new mongoose.Schema({
         corporatecode:String,
         points:Number,
         teamNicknam:String,
+        players:[{
+          id:String,
+          uniquecode:String
+        }]
     }]
 });
 
