@@ -1,5 +1,71 @@
-const express = require('express');
+const router = require('express').Router();
+const Judge = require('../models/Judge');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-const router = express.Router();
+router.post('/register', async (req, res) => {
+    try {
+        const { name, email, gameid, password } = req.body;
 
-module.exports =router
+        // Check if judge already exists
+        const existingJudge = await Judge.findOne({ email });
+        if (existingJudge) {
+            return res.status(400).json({ message: 'Judge already exists' });
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create new judge
+        const judge = new Judge({
+            name,
+            email,
+            games: [{ gameid }],
+            password: hashedPassword
+        });
+
+        await judge.save();
+
+        res.status(201).json({ message: 'Judge registered successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error registering judge' });
+    }
+});
+
+router.post('/login', async (req, res) => {
+    try {
+        const { gameid, password } = req.body;
+
+        // Find judge by gameid
+        const judge = await Judge.findOne({ 'games.gameid': gameid });
+        if (!judge) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
+        // Check password
+        const validPassword = await bcrypt.compare(password, judge.password);
+        if (!validPassword) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
+        // Create token
+        const token = jwt.sign(
+            { id: judge._id },
+            process.env.JWT_SECRET || 'your_jwt_secret',
+            { expiresIn: '1d' }
+        );
+
+        // Set cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000 // 1 day
+        });
+
+        res.json({ message: 'Logged in successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error logging in' });
+    }
+});
+
+module.exports = router;
