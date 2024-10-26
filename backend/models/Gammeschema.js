@@ -12,6 +12,10 @@ const GameSchema = new mongoose.Schema({
     pos2:String,
     pos3:String,
     status:String,
+    judges:[{
+      id:String,
+      name:String,
+    }],
     Location:String,
     number_of_players:Number,
     teams:[{
