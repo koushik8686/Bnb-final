@@ -1,10 +1,11 @@
 const express = require('express');
 const companymodel = require('../../models/Teammodel');
 const router = express.Router();
+const Usermodel = require('../../models/userschema');
 const Game = require('../../models/Gammeschema');
 router.post('/login', async (req, res) => {
-    const { TeamCode, password } = req.body; 
-    console.log(req.body);
+  console.log(req.body);
+  const { TeamCode, password } = req.body; 
     
     try {
    
@@ -107,7 +108,31 @@ router.get('/getteams' , function(req, res) {
         res.send(arr);
     })
 })
+router.get('/mvp/:code', async (req, res) => {
+    try {
+        // Fetch users with the specified corporate code
+        const users = await Usermodel.find({ corporatecode: req.params.code });
 
+        if (users.length === 0) {
+            return res.status(404).json({ message: 'No users found for this corporate code.' });
+        }
+
+        // Calculate total points for each user
+        const usersWithPoints = users.map(user => ({
+            ...user.toObject(), // Convert Mongoose document to plain object
+            totalPoints: user.points.reduce((acc, point) => acc + point.points, 0) // Sum points
+        }));
+
+        // Sort users by total points in descending order and get the top 3
+        const topUsers = usersWithPoints
+            .sort((a, b) => b.totalPoints - a.totalPoints)
+            .slice(0, 3); // Get top 3 users
+
+        res.json(topUsers); // Send the top users as a response
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 
 module.exports =router

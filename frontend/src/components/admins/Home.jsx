@@ -6,7 +6,7 @@ import { Games } from './Game';
 export default function Component() {
   const [activeSection, setActiveSection] = useState('Add Team');
 
-  const navItems = ['Add Team', 'Add a Game', 'Games', 'Chat', 'Advertisement Statistics'];
+  const navItems = ['Add Team', 'Add a Game', 'Games', 'Advertisement Statistics'];
 
   const gradients = {
     'Add Team': 'linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)',

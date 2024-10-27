@@ -1,192 +1,126 @@
-import axios from 'axios';
-import Cookies from 'js-cookie'; // Importing js-cookie
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+'use client'
 
-const Login = () => {
-    const [uniquecode, setUniquecode] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [imageVisible, setImageVisible] = useState(false); // For image visibility
-    const [slideDirection, setSlideDirection] = useState(''); // For slide direction
-    const navigate = useNavigate();
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        setImageVisible(true); // Show the image on login
+export default function Login() {
+  const [uniquecode, setUniquecode] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [imageVisible, setImageVisible] = useState(false)
+  const [slideDirection, setSlideDirection] = useState('')
+  const navigate = useNavigate()
 
-        try {
-            const response = await axios.post('http://localhost:4000/user/login', {
-                uniquecode,
-                password,
-            });
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setImageVisible(true)
 
-            const { userId } = response.data; // Get token from response
-            Cookies.set('authToken', userId); // Set the token in cookies
-            setSlideDirection('right'); // Set slide direction for success
+    try {
+      const response = await axios.post('http://localhost:4000/user/login', {
+        uniquecode,
+        password,
+      })
 
-            setTimeout(() => {
-                navigate('/user/home');
-            }, 1000); // Delay for animation before redirecting
+      const { userId } = response.data
+      Cookies.set('authToken', userId)
+      setSlideDirection('right')
 
-        } catch (err) {
-            setError('Invalid login credentials. Please try again.');
-            setSlideDirection('left'); // Set slide direction for failure
+      setTimeout(() => {
+        navigate('/user/home')
+      }, 1000)
+    } catch (err) {
+      setError('Invalid login credentials. Please try again.')
+      setSlideDirection('left')
 
-            // Reset image visibility after animation
-            setTimeout(() => {
-                setImageVisible(false);
-                setSlideDirection(''); // Reset slide direction
-            }, 1000); // Delay for animation
-        } finally {
-            setIsLoading(false);
-        }
-    };
+      setTimeout(() => {
+        setImageVisible(false)
+        setSlideDirection('')
+      }, 1000)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-    return (
-        <div className="login-container">
-            <h2>Login</h2>
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label htmlFor="uniquecode">Unique Code:</label>
-                    <input
-                        type="text"
-                        id="uniquecode"
-                        value={uniquecode}
-                        onChange={(e) => setUniquecode(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                {error && <p className="error">{error}</p>}
-                <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Logging in...' : 'Login'}
-                </button>
-            </form>
+  // Function to handle navigation to the sign-up page
+  const handleSignUp = () => {
+    navigate('/user/register')
+  }
 
-            {/* Conditional rendering of the image */}
-            {imageVisible && (
-                <img
-                    src="https://images-cdn.ubuy.co.in/633ff9de5b90de67d82ee14e-squid-game-masked-man-mask-reality.jpg"
-                    alt="Login Animation"
-                    className={`animated-image ${slideDirection}`}
-                />
-            )}
-
-            {/* Inline CSS */}
-            <style jsx>{`
-                body {
-                    margin: 0;
-                    height: 100vh;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    background-color: #282c34;
-                    position: relative; /* Ensure body can contain absolutely positioned elements */
-                    overflow: hidden; /* Prevent overflow from image sliding */
-                }
-
-                .login-container {
-                    background-color: rgba(0, 0, 0, 0.7);
-                    border-radius: 10px;
-                    padding: 30px;
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-                    width: 300px;
-                    text-align: center;
-                    position: relative; /* To position the image correctly */
-                    z-index: 10; /* Keep login form above the image */
-                }
-
-                h2 {
-                    font-size: 24px;
-                    margin-bottom: 20px;
-                    color: #e60000;
-                }
-
-                label {
-                    display: block;
-                    margin-bottom: 5px;
-                    font-size: 14px;
-                    color: #e6e600;
-                }
-
-                input {
-                    width: 100%;
-                    padding: 10px;
-                    margin-bottom: 15px;
-                    border: 2px solid #e60000;
-                    border-radius: 5px;
-                    font-size: 16px;
-                    background-color: #1f1f1f;
-                    color: #fff;
-                    outline: none;
-                    transition: border 0.3s;
-                }
-
-                input:focus {
-                    border-color: #e6e600;
-                }
-
-                .error {
-                    color: #ff4d4d;
-                    margin-bottom: 15px;
-                }
-
-                button {
-                    width: 100%;
-                    padding: 10px;
-                    background-color: #e60000;
-                    color: #fff;
-                    border: none;
-                    border-radius: 5px;
-                    font-size: 16px;
-                    cursor: pointer;
-                    transition: background-color 0.3s;
-                }
-
-                button:hover {
-                    background-color: #cc0000;
-                }
-
-                button:disabled {
-                    background-color: #666;
-                    cursor: not-allowed;
-                }
-
-                /* Image styles */
-                .animated-image {
-                    position: fixed; /* Use fixed to cover entire viewport */
-                    top: 0; /* Start from the top */
-                    left: 50%;
-                    transform: translateX(-50%); /* Center horizontally */
-                    transition: transform 1s ease; /* Smooth transition */
-                    width: 100vw; /* Full width of viewport */
-                    height: 100vh; /* Full height of viewport */
-                    object-fit: cover; /* Maintain aspect ratio while covering */
-                    z-index: 5; /* Place below the form */
-                }
-
-                .animated-image.left {
-                    transform: translate(-150%, 0); /* Slide left */
-                }
-
-                .animated-image.right {
-                    transform: translate(150%, 0); /* Slide right */
-                }
-            `}</style>
-        </div>
-    );
-};
-
-export default Login;
+  return (
+    <div className="relative min-h-screen flex flex-col items-center justify-center bg-[#282c34] overflow-hidden">
+      <div className="absolute inset-0 flex justify-between items-center pointer-events-none">
+        <div className="h-full w-4 bg-[#e60000] transform -skew-x-12"></div>
+        <div className="h-full w-4 bg-[#e60000] transform skew-x-12"></div>
+      </div>
+      <div
+        className={`login-container bg-black bg-opacity-70 rounded-lg p-8 shadow-lg w-[400px] text-center relative z-10 transition-transform duration-1000 ease-in-out ${
+          slideDirection === 'left'
+            ? '-translate-x-full'
+            : slideDirection === 'right'
+            ? 'translate-x-full'
+            : ''
+        }`}
+      >
+        <h2 className="text-2xl mb-6 text-[#e60000] font-bold">Squid Game Login</h2>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label htmlFor="uniquecode" className="block mb-1 text-sm text-[#e6e600]">
+              Unique Code:
+            </label>
+            <input
+              type="text"
+              id="uniquecode"
+              value={uniquecode}
+              onChange={(e) => setUniquecode(e.target.value)}
+              required
+              className="w-full px-3 py-2 bg-[#1f1f1f] border-2 border-[#e60000] rounded-md text-white focus:border-[#e6e600] transition-colors duration-300"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block mb-1 text-sm text-[#e6e600]">
+              Password:
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-3 py-2 bg-[#1f1f1f] border-2 border-[#e60000] rounded-md text-white focus:border-[#e6e600] transition-colors duration-300"
+            />
+          </div>
+          {error && <p className="text-[#ff4d4d]">{error}</p>}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-2 bg-[#e60000] text-white rounded-md font-bold hover:bg-[#cc0000] transition-colors duration-300 disabled:bg-gray-600 disabled:cursor-not-allowed"
+          >
+            {isLoading ? 'Logging in...' : 'Login'}
+          </button>
+        </form>
+      </div>
+      {imageVisible && (
+        <img
+          src="https://images-cdn.ubuy.co.in/633ff9de5b90de67d82ee14e-squid-game-masked-man-mask-reality.jpg"
+          alt="Squid Game Mask"
+          className={`fixed inset-0 w-full h-full object-cover transition-transform duration-1000 ease-in-out ${
+            slideDirection === 'left' ? '-translate-x-full' : slideDirection === 'right' ? 'translate-x-full' : ''
+          }`}
+        />
+      )}
+      {/* Sign Up Button */}
+      <div className="mt-auto mb-8">
+        <button
+          onClick={handleSignUp}
+          className="w-[400px] py-2 bg-[#1f1f1f] text-[#e6e600] rounded-md font-bold hover:bg-[#2a2a2a] transition-colors duration-300"
+        >
+          Sign Up
+        </button>
+      </div>
+    </div>
+  )
+}

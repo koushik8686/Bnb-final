@@ -82,6 +82,19 @@ export default function AdvertisementAnalytics() {
       >
         Download CSV
       </button>
+      <button
+        style={{
+          marginBottom: '20px',
+          padding: '10px 15px',
+          backgroundColor: 'red',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+        }}
+      >
+        <a href="/admin/home">Back</a>
+      </button>
 
       <div style={{ marginBottom: '40px' }}>
         <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Advertisement Clicks by Company</h2>

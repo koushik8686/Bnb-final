@@ -6,9 +6,10 @@ const http = require('http');
 const server = http.createServer(app);  // Attach Express to HTTP server
 const port = 4000;
 const cors = require('cors');
-// const messageModel = require('./models/messagemodel');
+const socketIo = require('socket.io');
+const messageModel = require('./models/LeadChats');
 const dotenv = require('dotenv');
-
+app.use(express.json());
 dotenv.config();
 
 // Connect to MongoDB
@@ -18,22 +19,20 @@ mongoose.connect(process.env.URL , {
 });
 
 app.use(express.static("uploads"));
-const corsOptions = {
-  origin: 'http://localhost:3000', // Specify the origin you want to allow
-  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-};
-
-app.use(cors(corsOptions)); // 
-app.use(express.json());
-
-// Initialize Socket.IO on the same server as Express
-const io = new Server(server, {
-  cors: {
-    origin: "*", // Frontend URL
-    methods: 'GET,POST,PUT,DELETE', // Specify allowed methods if needed
-  },
-});
-
+app.use(
+    cors({
+      origin: "http://localhost:3000", // Replace with your frontend URL
+      credentials: true,
+    })
+  );
+  
+  const io = socketIo(server, {
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+      credentials: true,
+    },
+  });
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
@@ -55,7 +54,7 @@ io.on('connection', (socket) => {
       
               try {
           // Find or create the message document for the specific startup
-          const existingMessages = await messageModel.findOne({ startup_id: roomId });
+          const existingMessages = await messageModel.findOne({ userid: roomId });
           if (existingMessages) {
              console.log(existingMessages.startup_id, );
               // If messages already exist, push the new message to the messages array
@@ -145,7 +144,23 @@ app.use("/teamleads" , require("./routes/team-leads/team"))
 app.use("/judge" , require("./routes/judge/judge"))
 app.use("/admin" , require("./routes/admin/admin"))
 app.use("/advertisement" , require("./routes/advertisement/advertisement"))
+app.get('/messages/:id', async (req, res) => {
+    try {
+      // Fetch all startups and only the required fields
+      const messages = await messageModel.findOne({startup_id: req.params.id});
+      // Format the data for the response
+      // Send the formatted data
+      if (!messages) {
+        return
+      }
+      res.status(200).send(messages);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server Error' });
+    }
+  });
+
 server.listen(port, () => {
         console.log(`Server is running on port ${port}`);
-      });
+});
       

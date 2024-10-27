@@ -123,6 +123,17 @@ router.get('/:code', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+router.get('/mvp/:code', async (req, res) => {
+    try {
+        const users = await Usermodel.find({ corporatecode: req.params.code });
+        if (users.length === 0) {
+            return res.status(404).json({ message: 'No users found for this corporate code.' });
+        }
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 // Route to get a specific user by ID
 router.get('/getcerts/:id', async (req, res) => {

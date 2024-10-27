@@ -66,7 +66,7 @@ export default function Cert() {
 
       // Link
       ctx.font = '30px "Palatino"';
-      ctx.fillText(`Link: https://localhost:4000/${id}/${number}`, canvas.width / 2, 540);
+      ctx.fillText(`Link: http://localhost:4000/${id}/${number}`, canvas.width / 2, 540);
 
       // Signature
       ctx.font = 'italic bold 40px "Brush Script MT", cursive';

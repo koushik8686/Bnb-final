@@ -10,7 +10,7 @@ import Cookies from 'js-cookie'
 const socket = io("http://localhost:4000")
 
 export default function Chat() {
-  const [users, setusers] = useState([])
+  const [users, setUsers] = useState([])
   const [selectedStartup, setSelectedStartup] = useState(null)
   const [messages, setMessages] = useState([])
   const [inputMessage, setInputMessage] = useState('')
@@ -18,36 +18,49 @@ export default function Chat() {
   const messagesEndRef = useRef(null)
   const companyid = Cookies.get('company')
   useEffect(() => {
-    const {code} = axios.get(`teamleads/getcode/${companyid}`)
-    const fetchusers = async () => {
+    // Fetch code and then fetch users
+    const fetchCodeAndUsers = async () => {
       try {
-        const response = await axios.get(`/users/${code}`)
-        setusers(response.data)
+        // First, get the code
+        const { data } = await axios.get(`http://localhost:4000/teamleads/getcode/${companyid}`);
+        const code = data; // adjust based on the structure of response
+        console.log(code);
+        
+        // Then use the code to fetch users
+        if (code) {
+          const response = await axios.get(`http://localhost:4000/user/${code}`);
+          console.log(response);
+          
+          setUsers(response.data);
+            
+        }
       } catch (error) {
-        console.error('Error fetching users:', error)
+        console.error('Error fetching code or users:', error);
       }
-    }
+    };
 
-    fetchusers()
+    fetchCodeAndUsers();
 
+    // Setup socket listeners
     socket.on('receiveMessage', (messageData) => {
-      console.log("Message received: ", messageData)
-      setMessages((prevMessages) => (prevMessages ? [...prevMessages, messageData] : [messageData]))
+      console.log('Message received: ', messageData);
+      setMessages((prevMessages) => [...prevMessages, messageData]);
       setUnreadMessages((prev) => ({
         ...prev,
-        [messageData.roomId]: (prev[messageData.roomId] || 0) + 1
-      }))
-    })
+        [messageData.roomId]: (prev[messageData.roomId] || 0) + 1,
+      }));
+    });
 
     socket.on('connect', () => {
-      console.log('Connected to the server with ID:', socket.id)
-    })
+      console.log('Connected to the server with ID:', socket.id);
+    });
 
+    // Cleanup on component unmount
     return () => {
-      socket.off('receiveMessage')
-      socket.off('connect')
-    }
-  }, [])
+      socket.off('receiveMessage');
+      socket.off('connect');
+    };
+  }, [companyid]); // Depend on `companyid` to re-run when it changes
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -118,7 +131,7 @@ export default function Chat() {
                 <ArrowLeft className="h-6 w-6" />
               </button>
               <h2 className="text-xl font-bold">
-                {users.find((s) => s._id === selectedStartup)?.kyc.company_name}
+                {users.find((s) => s._id === selectedStartup)?.uniquecode}
               </h2>
             </div>
             <div className="flex-1 p-4 overflow-y-auto">
@@ -210,7 +223,7 @@ export default function Chat() {
                       onClick={() => handleStartupClick(startup._id)}
                     >
                       <div>
-                        <h2 className="font-semibold text-blue-800">{startup.kyc.company_name}</h2>
+                        <h2 className="font-semibold text-blue-800">{startup.uniquecode}</h2>
                       </div>
                       <div className="flex items-center">
                         {unreadMessages[startup._id] > 0 && (
