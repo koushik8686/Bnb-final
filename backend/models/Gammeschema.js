@@ -2,13 +2,14 @@
 const mongoose = require('mongoose');
 
 const GameSchema = new mongoose.Schema({
-   gameid:String,
+    gameid:String,
     gamepicture:String,
     eventname:String,
     singleplayer:Boolean,
     multiplayer:Boolean,
     Date:String,
     start_time:String,
+    calories:Number,
     end_time:String,
     pos1:String,
     pos2:String,
@@ -25,8 +26,8 @@ const GameSchema = new mongoose.Schema({
         points:Number,
         teamNickname:String,
         players:[{
-          id:String,
-          uniquecode:String
+          playerId:String,
+          name:String
         }]
     }]
 });

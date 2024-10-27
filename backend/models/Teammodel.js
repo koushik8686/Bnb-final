@@ -6,6 +6,7 @@ const teamSchema = new mongoose.Schema({
     teamNickname: { type: String },
     password:String,
     imgurl:String,
+    points:Number,
     members: [{ id: String , uniquecode: String }],
 });
 

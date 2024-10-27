@@ -8,12 +8,13 @@ const userschema = mongoose.Schema({
     uniquecode:String,
     points:[{
      game:String,
-     points:Number
+     points:Number,
+     calories:Number
     }],
     certificates:[{
         name:String,
         position:Number,
-        evevent:String
+        event:String
     }]
 })
 
