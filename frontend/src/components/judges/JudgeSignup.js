@@ -21,13 +21,12 @@ const JudgeSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post('http://localhost:4000/judge/register', formData, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true // This is important for sending cookies
-        });
-
+      const response = await axios.post('http://localhost:4000/judge/register', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+    });
         // Assuming the backend sends a message or data you want to handle
         const data = response.data;
 

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { AddTeam } from './AddTeam';
 import { AddGame } from './AddGame';
 import { Games } from './Game';
-import { Chat } from './Chat';
 
 export default function Component() {
   const [activeSection, setActiveSection] = useState('Add Team');
@@ -69,8 +68,6 @@ export default function Component() {
         return <AddGame />;
       case 'Games':
         return <Games />;
-      case 'Chat':
-        return <Chat />;
       case 'Advertisement Statistics':
         window.location.href = '/admin/graph';
         return null;

@@ -20,8 +20,11 @@ import UserRegister from './components/user/UserRegister';
 import Landing from './components/Landing';
 import TeamPointsTable from './components/PointsTablePage';
 import AdminGraphs from './components/admins/graph';
-import EnhancedUserDashboard from './components/user/NewUserHome';
 import AdvertisementAnalytics from './components/admins/graph';
+import Chat from './components/user/Chat';
+import NotFound from './components/NotFound';
+import DynamicCertificateGenerator from './components/user/Certificate';
+import Cert from './components/user/Cert';
 
 function App() {
   return (
@@ -32,6 +35,9 @@ function App() {
           <Route path='/' Component={Landing} />
           <Route path='/user/register' Component={UserRegister} />
           <Route path='/user/home' Component={UserHome} />
+          <Route path='/user/chat' Component={Chat} />
+          <Route path='/user/certs' Component={DynamicCertificateGenerator} />
+          <Route path='/user/:id/:number' Component={Cert} />
           <Route path="/admin/login" Component={AdminLogin} />
           <Route path="/admin/graph" Component={AdvertisementAnalytics}/>
           <Route path="/admin/home" Component={AdminHome} />
@@ -48,6 +54,7 @@ function App() {
           <Route path="/teamleads/table-standing" Component={TeamLeadsStandings}/>
           <Route path="/teamleads/contact" Component={TeamLeadsContact}/>
           <Route path="/game/:game" Component={TeamPointsTable}/>
+          <Route path='*' Component={NotFound}/>
         </Routes>
       </BrowserRouter>
     </div>

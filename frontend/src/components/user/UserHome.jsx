@@ -110,6 +110,9 @@ const UserHome = () => {
                         <img src="" alt="Profile" style={styles.profileImage} />
                     </div>
                     <h2 onClick={fetchUserGames} style={styles.navItem}>My Games</h2>
+                    <a href='/user/chat' style={styles.navItem}>Chat</a>
+                    <a href='/user/certs' style={styles.navItem}>Certificates</a>
+                    
                 </nav>
                 
                 <div style={styles.mainContent}>

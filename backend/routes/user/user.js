@@ -112,5 +112,39 @@ router.get('/getusergames/:id', async (req, res) => {
     }
 });
 
+router.get('/:code', async (req, res) => {
+    try {
+        const users = await Usermodel.find({ corporatecode: req.params.code });
+        if (users.length === 0) {
+            return res.status(404).json({ message: 'No users found for this corporate code.' });
+        }
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
+// Route to get a specific user by ID
+router.get('/getcerts/:id', async (req, res) => {
+    try {
+        const user = await Usermodel.findOne({ _id: req.params.id });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+        res.json(user.certificates);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+router.get('/:id/:number', async (req, res) => {
+    try {
+        const user = await Usermodel.findOne({ _id: req.params.id });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+        res.json(user.certificates[req.params.number]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 module.exports = router;

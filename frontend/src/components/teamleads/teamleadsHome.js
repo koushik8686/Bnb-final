@@ -14,7 +14,7 @@ const Home = () => {
   }, [teamCode, navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('teamCode');
+    Cookies.remove('company');
     navigate('/teamleads/login');
   };
 

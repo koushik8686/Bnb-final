@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Chat from "./Chat";
 
 function Button({ children, onClick }) {
   return (
@@ -95,30 +96,7 @@ function Contact() {
 
       <main className="flex-grow container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Contact</h1>
-        <Card>
-          <CardHeader>
-            <CardTitle>Chat with Team Members</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-80 overflow-y-auto mb-4 p-4 border rounded">
-              {chatHistory.map((chat, index) => (
-                <div key={index} className={`mb-2 ${chat.sender === "You" ? "text-right" : "text-left"}`}>
-                  <span className="font-bold">{chat.sender}: </span>
-                  {chat.message}
-                </div>
-              ))}
-            </div>
-            <div className="flex gap-2">
-              <Input
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Type your message..."
-                onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-              />
-              <Button onClick={handleSendMessage}>Send</Button>
-            </div>
-          </CardContent>
-        </Card>
+        <Chat/>
       </main>
     </div>
   );

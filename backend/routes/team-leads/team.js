@@ -34,6 +34,11 @@ router.get("/getteam/:id" , function (req, res) {
         res.send(company.members);
     })
 }) 
+router.get("/getcode/:id" , function (req, res) {
+    companymodel.findById(req.params.id).then((company)=>{
+        res.send(company.TeamCode);
+    })
+}) 
 router.get('/getgames/:id', async (req, res) => {
     try {
         const games = [];
@@ -102,5 +107,7 @@ router.get('/getteams' , function(req, res) {
         res.send(arr);
     })
 })
+
+
 
 module.exports =router
