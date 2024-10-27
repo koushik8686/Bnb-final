@@ -209,7 +209,7 @@ export default function DynamicCertificateGenerator() {
                     Download
                   </button>
                   <a
-                    href={`http://localhost:3000/user/${certificate._id}/${index}`}
+                    href={`http://localhost:3000/user/${user}/${index}`}
                     style={{...styles.button, ...styles.viewButton, textDecoration: 'none'}}
                   >
                     View

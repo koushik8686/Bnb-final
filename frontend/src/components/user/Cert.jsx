@@ -10,7 +10,7 @@ export default function Cert() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://localhost:4000/user/${id}/${number}`);
+        const response = await axios.get(`http://localhost:4000/user/${id}/${number}`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching certificate data:", error);
