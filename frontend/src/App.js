@@ -17,6 +17,11 @@ import JudgeGame from './components/judges/JudgeGame';
 import UserHome from './components/user/UserHome';
 import UserLogin from './components/user/UserLogin';
 import UserRegister from './components/user/UserRegister';
+import Landing from './components/Landing';
+import TeamPointsTable from './components/PointsTablePage';
+import AdminGraphs from './components/admins/graph';
+import EnhancedUserDashboard from './components/user/NewUserHome';
+import AdvertisementAnalytics from './components/admins/graph';
 
 function App() {
   return (
@@ -24,9 +29,11 @@ function App() {
       <BrowserRouter>
         <Routes>
         <Route path='/user/login' Component={UserLogin} />
+          <Route path='/' Component={Landing} />
           <Route path='/user/register' Component={UserRegister} />
           <Route path='/user/home' Component={UserHome} />
           <Route path="/admin/login" Component={AdminLogin} />
+          <Route path="/admin/graph" Component={AdvertisementAnalytics}/>
           <Route path="/admin/home" Component={AdminHome} />
           <Route path="/judges/login" Component={JudgeLogin} />
           <Route path="/judges/signup" Component={JudgeSignup} />
@@ -40,6 +47,7 @@ function App() {
           <Route path="/teamleads/team-list" Component={TeamLeadsList}/>
           <Route path="/teamleads/table-standing" Component={TeamLeadsStandings}/>
           <Route path="/teamleads/contact" Component={TeamLeadsContact}/>
+          <Route path="/game/:game" Component={TeamPointsTable}/>
         </Routes>
       </BrowserRouter>
     </div>

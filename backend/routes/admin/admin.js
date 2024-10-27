@@ -32,8 +32,7 @@ router.post('/login', async (req, res) => {
       if (password !== admin.password) {
         return res.status(400).json({ error: 'Invalid password' });
       }
-  
-      res.status(200).json({ message: 'Create team successful' });
+      res.status(200).json({ message: 'Create team successful' , id:admin._id });
     } catch (error) {
       res.status(500).json({ error: 'Failed to log in' });
     }

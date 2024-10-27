@@ -7,13 +7,14 @@ import { Chat } from './Chat';
 export default function Component() {
   const [activeSection, setActiveSection] = useState('Add Team');
 
-  const navItems = ['Add Team', 'Add a Game', 'Games', 'Chat'];
+  const navItems = ['Add Team', 'Add a Game', 'Games', 'Chat', 'Advertisement Statistics'];
 
   const gradients = {
     'Add Team': 'linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)',
     'Add a Game': 'linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)',
     'Games': 'linear-gradient(to right, #43e97b 0%, #38f9d7 100%)',
     'Chat': 'linear-gradient(to right, #fa709a 0%, #fee140 100%)',
+    'Advertisement Statistics': 'linear-gradient(to right, #ff758c 0%, #ff7eb3 100%)',
   };
 
   const styles = {
@@ -70,6 +71,9 @@ export default function Component() {
         return <Games />;
       case 'Chat':
         return <Chat />;
+      case 'Advertisement Statistics':
+        window.location.href = '/admin/graph';
+        return null;
       default:
         return <div>Select a section</div>;
     }

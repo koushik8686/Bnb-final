@@ -107,7 +107,7 @@ export default function GameList() {
         </h1>
         <div className="space-y-6">
           {games && games.map((game) => (
-            <Card key={game.id} href={`/game/${game.id}`}>
+            <Card key={game.id} href={`/game/${game._id}`}>
               <CardContent>
                 <div className="flex justify-between items-center">
                   <h2 className="text-2xl font-bold text-gray-800">{game.eventname}</h2>
