@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useEffect } from 'react';
-
-
-
+import { useParams } from 'react-router-dom';
 
 export function AddGame() {
-
-  const [game, setGame] = useState({
+const { game } = useParams();
+console.log("Game parameter from URL:", game);
+  const [Game, setGame] = useState({
     eventName: '',
     singleplayer: false,
     multiplayer: false,
@@ -15,8 +13,9 @@ export function AddGame() {
     num_of_players: 0,
     start_time: '',
     end_time: '',
-    judges: [{ id: '', name: '' }]
+    judges: [{ _id: '', name: '' }]
   });
+  const [Availablejudges, setAvailablejudges] = useState([]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -27,49 +26,47 @@ export function AddGame() {
   };
 
   const handleJudgeChange = (index, value) => {
-    console.log("Selected value:", value);
-    console.log("Available Judges:", Availablejudges);
-
     const selectedJudge = Availablejudges.find(judge => judge._id === value);
     if (selectedJudge) {
-        const updatedJudges = [...game.judges];
-        updatedJudges[index] = { _id: selectedJudge._id, name: selectedJudge.name };
-        setGame(prevGame => ({ ...prevGame, judges: updatedJudges }));
+      const updatedJudges = [...Game.judges];
+      updatedJudges[index] = { _id: selectedJudge._id, name: selectedJudge.name };
+      setGame(prevGame => ({ ...prevGame, judges: updatedJudges }));
     } else {
-        console.error(`Judge with value ${value} not found in Availablejudges`);
+      console.error(`Judge with ID ${value} not found in Availablejudges`);
     }
-};
-
-
+  };
 
   const addJudge = () => {
-    setGame(prevGame => ({ ...prevGame, judges: [...prevGame.judges, { _id: '', name: '' }] }));
+    setGame(prevGame => ({
+      ...prevGame,
+      judges: [...prevGame.judges, { _id: '', name: '' }]
+    }));
   };
 
   const removeJudge = (index) => {
-    setGame(prevGame => ({ ...prevGame, judges: prevGame.judges.filter((_, i) => i !== index) }));
+    setGame(prevGame => ({
+      ...prevGame,
+      judges: prevGame.judges.filter((_, i) => i !== index)
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:4000/admin/addgame', { game })
+    axios.post(`http://localhost:4000/admin/${game}`, Game)
       .then(response => console.log(response))
       .catch(error => console.error(error));
   };
-  const [Availablejudges, setAvailablejudges] = useState([])
+
   useEffect(() => {
-    console.log("sending data");
-    axios.get('http://localhost:4000/admin/getjudges')
-     .then(res => {
-       console.log(res);
+    axios.get(`http://localhost:4000/admin/${game}`)
+      .then(res => {
         setAvailablejudges(res.data.map(({ _id, name }) => ({ _id, name })));
-        console.log(Availablejudges);
       })
-     .catch(err => {
+      .catch(err => {
         console.error(err);
       });
-   }, []);
-  
+  }, [game]);
+
   const styles = {
     container: {
       width: '80%',
@@ -116,93 +113,85 @@ export function AddGame() {
   };
 
   return (
-    <div  style={styles.container}>
+    <div style={styles.container}>
       <h2>Add a Game</h2>
-      <form className='text-black' onSubmit={handleSubmit} style={styles.form}>
+      <form className="text-black" onSubmit={handleSubmit} style={styles.form}>
         <input
           type="text"
           name="eventName"
-          value={game.eventName}
+          value={Game.eventName}
           onChange={handleChange}
           placeholder="Event Name"
           required
           style={styles.input}
         />
-        
         <div>
           <label>
             <input
               type="checkbox"
               name="singleplayer"
-              checked={game.singleplayer}
+              checked={Game.singleplayer}
               onChange={handleChange}
               style={styles.checkbox}
             />
             Singleplayer
           </label>
         </div>
-        
         <div>
           <label>
             <input
               type="checkbox"
               name="multiplayer"
-              checked={game.multiplayer}
+              checked={Game.multiplayer}
               onChange={handleChange}
               style={styles.checkbox}
             />
             Multiplayer
           </label>
         </div>
-        
         <input
           type="date"
           name="date"
-          value={game.date}
+          value={Game.date}
           onChange={handleChange}
           required
           style={styles.input}
         />
-        
         <input
           type="time"
           name="start_time"
-          value={game.start_time}
+          value={Game.start_time}
           onChange={handleChange}
           required
           style={styles.input}
         />
-        
         <input
           type="time"
           name="end_time"
-          value={game.end_time}
+          value={Game.end_time}
           onChange={handleChange}
           required
           style={styles.input}
         />
-        
         <input
           type="number"
           name="num_of_players"
-          value={game.num_of_players}
+          value={Game.num_of_players}
           onChange={handleChange}
           required
           style={styles.input}
         />
-        
         <h3>Judges</h3>
-        {game.judges.map((judge, index) => (
+        {Game.judges.map((judge, index) => (
           <div key={index} style={styles.judgeContainer}>
-          <select onChange={(e) => handleJudgeChange(index, e.target.value)}>
-    <option value="">Select Judge</option>
-    {Availablejudges.map(judge => (
-        <option key={judge._id} value={judge._id}>
-            {judge.name}
-        </option>
-    ))}
-</select>
-
+            <select onChange={(e) => handleJudgeChange(index, e.target.value)} value={judge._id}>
+              <option value="">Select Judge</option>
+              {Availablejudges.map(judgeOption => (
+                <option key={judgeOption._id} value={judgeOption._id}>
+                  {judgeOption.name}
+                </option>
+              ))}
+            </select>
             {index > 0 && (
               <button
                 type="button"
@@ -217,7 +206,6 @@ export function AddGame() {
         <button type="button" onClick={addJudge} style={styles.button}>
           Add Judge
         </button>
-        
         <button type="submit" style={styles.button}>Add Game</button>
       </form>
     </div>

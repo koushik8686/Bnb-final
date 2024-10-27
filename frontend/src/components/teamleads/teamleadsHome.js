@@ -1,10 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './teamleadsHome.css';
+import Cookies from 'js-cookie'
 
 const Home = () => {
   const navigate = useNavigate();
-  const teamCode = localStorage.getItem('teamCode');
+  const teamCode = Cookies.get('company');
 
   React.useEffect(() => {
     if (!teamCode) {

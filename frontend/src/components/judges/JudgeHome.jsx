@@ -151,7 +151,7 @@ const navigate = useNavigate()
   };
 
   const navigateToGame = (gameId) => {
-   navigate(`/game/${gameId}`); // Navigate to the game page
+   navigate(`/judge/${gameId}`); // Navigate to the game page
   };
 
   return (

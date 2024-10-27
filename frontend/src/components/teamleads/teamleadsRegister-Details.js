@@ -1,99 +1,144 @@
-import React from "react";
+'use client'
 
-function Button({ variant, children }) {
-  const buttonStyle = variant === "ghost" ? "text-white-700 hover:text-white-900" : "bg-gray-200";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { CalendarDays, Clock, MapPin, Users, Check } from "lucide-react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import Cookies from "js-cookie";
+
+function Button({ variant, children, onClick }) {
+  const buttonStyle = variant === "ghost" 
+    ? "text-white hover:text-gray-300" 
+    : "bg-blue-600 text-white hover:bg-blue-700";
   return (
-    <button className={`${buttonStyle} px-4 py-2 rounded-md`}>{children}</button>
+    <motion.button
+      className={`${buttonStyle} px-4 py-2 rounded-md transition-colors duration-300`}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={onClick}
+    >
+      {children}
+    </motion.button>
   );
 }
 
-function Table({ children }) {
-  return <table className="min-w-full bg-white border">{children}</table>;
+function Card({ children, href }) {
+  return (
+    <motion.div
+      className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 mb-4"
+      whileHover={{ y: -5, scale: 1.02 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <Link to={href} className="block">
+        {children}
+      </Link>
+    </motion.div>
+  );
 }
 
-function TableHeader({ children }) {
-  return <thead className="bg-gray-200">{children}</thead>;
+function CardContent({ children }) {
+  return <div className="px-6 py-4">{children}</div>;
 }
 
-function TableRow({ children }) {
-  return <tr className="border-b">{children}</tr>;
-}
+export default function GameList() {
+  const company = Cookies.get('company');
+  const [games, setGames] = useState([]);
 
-function TableHead({ children }) {
-  return <th className="px-4 py-2 text-left font-semibold">{children}</th>;
-}
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/teamleads/getgames/${company}`);
+        setGames(response.data);
+      } catch (error) {
+        console.error("Error fetching games:", error);
+      }
+    };
 
-function TableBody({ children }) {
-  return <tbody>{children}</tbody>;
-}
+    fetchGames();
+  }, [company]);
 
-function TableCell({ children }) {
-  return <td className="px-4 py-2 border-t">{children}</td>;
-}
-
-function RegistrationDetails() {
-  const registrations = [
-    { id: 1, game: "Soccer", corporateCode: "CORP123", players: "John, Jane, Bob" },
-    { id: 2, game: "Basketball", corporateCode: "CORP456", players: "Alice, Charlie, David" },
-  ];
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+  };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <header className="bg-gray-800 text-white shadow-md">
         <nav className="container mx-auto px-4 py-4">
           <ul className="flex justify-between items-center">
             <li>
-              <a href="/teamleads/registered-games">
-                <Button variant="ghost">Registered Games</Button>
-              </a>
+              <Link to="/teamleads/registered-games">
+                <Button variant="ghost">All Games</Button>
+              </Link>
             </li>
             <li>
-              <a href="/teamleads/registration-details">
+              <Link to="/teamleads/registration-details">
                 <Button variant="ghost">Registration Details</Button>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/teamleads/team-list">
+              <Link to="/teamleads/team-list">
                 <Button variant="ghost">Team List</Button>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/teamleads/table-standing">
+              <Link to="/teamleads/table-standing">
                 <Button variant="ghost">Table Standing</Button>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/teamleads/contact">
+              <Link to="/teamleads/contact">
                 <Button variant="ghost">Contact</Button>
-              </a>
+              </Link>
             </li>
-          </ul> 
+          </ul>
         </nav>
       </header>
 
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Registration Details</h1>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Game</TableHead>
-              <TableHead>Corporate Code</TableHead>
-              <TableHead>Participating Players</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {registrations.map((reg) => (
-              <TableRow key={reg.id}>
-                <TableCell>{reg.game}</TableCell>
-                <TableCell>{reg.corporateCode}</TableCell>
-                <TableCell>{reg.players}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      <main className="flex-grow container mx-auto px-4 py-12">
+        <h1 className="text-4xl font-extrabold mb-8 text-center text-gray-800">
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">
+            Game List
+          </span>
+        </h1>
+        <div className="space-y-6">
+          {games && games.map((game) => (
+            <Card key={game.id} href={`/game/${game.id}`}>
+              <CardContent>
+                <div className="flex justify-between items-center">
+                  <h2 className="text-2xl font-bold text-gray-800">{game.eventname}</h2>
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    <Check className="w-4 h-4 mr-1" />
+                    Applied
+                  </span>
+                </div>
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex items-center">
+                    <CalendarDays className="w-5 h-5 mr-2 text-blue-500" />
+                    <span className="text-gray-700">{formatDate(game.date)}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Clock className="w-5 h-5 mr-2 text-blue-500" />
+                    <span className="text-gray-700">{game.start_time} - {game.end_time}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <MapPin className="w-5 h-5 mr-2 text-blue-500" />
+                    <span className="text-gray-700">{game.Location}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Users className="w-5 h-5 mr-2 text-blue-500" />
+                    <span className="text-gray-700">{game.number_of_players} Players</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </main>
     </div>
   );
 }
-
-export default RegistrationDetails;

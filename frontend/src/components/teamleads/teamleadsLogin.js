@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './teamleadsLogin.css';
+import Cookies from 'js-cookie'
 
 const TeamleadsLogin = () => {
   const navigate = useNavigate();
@@ -26,21 +27,26 @@ const TeamleadsLogin = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:4000/teamleads/login', formData, {
-        withCredentials: true
-      });
-
-      if (response.data.success) {
-        localStorage.setItem('teamCode', formData.TeamCode);
-        navigate('/teamleads/home');
+      const response = await axios.post('http://localhost:4000/teamleads/login', formData);
+      
+      if (response.data) {
+       Cookies.set('company' , response.data.company)
+        // Use get() to retrieve from FormData
+        navigate('/teamleads/dashboard');
       } else {
         setError('Login failed. Please check your credentials.');
       }
-    } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred during login.');
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      // Log error details
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+        setError(`Login failed: ${error.response.data.message || 'Unknown error'}`);
+      } else {
+        console.error('Error:', error.message);
+        setError('Login failed. Please try again later.');
+      }
     }
+    
   };
 
   return (

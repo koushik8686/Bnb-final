@@ -13,6 +13,7 @@ import TeamLeadsList from './components/teamleads/teamleadsTeam-List';
 import TeamLeadsStandings from './components/teamleads/teamleadsTeam-Standings';
 import TeamLeadsContact from './components/teamleads/teamleadsChatBot';
 import JudgeHome from './components/judges/JudgeHome';
+import JudgeGame from './components/judges/JudgeGame';
 import UserHome from './components/user/UserHome';
 import UserLogin from './components/user/UserLogin';
 import UserRegister from './components/user/UserRegister';
@@ -30,6 +31,7 @@ function App() {
           <Route path="/judges/login" Component={JudgeLogin} />
           <Route path="/judges/signup" Component={JudgeSignup} />
           <Route path="/judges/home" Component={JudgeHome} />
+          <Route path="/judge/:game" Component={JudgeGame} />
           <Route path="/teamleads/login" Component={TeamLeadsLogin} />
           <Route path="/teamleads/home" Component={TeamLeadsHome} />
           <Route path="/teamleads/dashboard" Component={TeamLeadsDashboard} />
